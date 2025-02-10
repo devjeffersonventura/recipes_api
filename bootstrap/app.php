@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\CustomCors;
 use Illuminate\Foundation\Application;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -16,9 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'v1/*',
         ]);
 
-        // Adicionando o middleware do Sanctum para APIs
         $middleware->alias([
             'sanctum' => EnsureFrontendRequestsAreStateful::class,
+            'cors' => CustomCors::class,
         ]);        
     })
     ->withExceptions(function (Exceptions $exceptions) {
