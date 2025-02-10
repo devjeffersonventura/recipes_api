@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Recipe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class RecipeController
 {
@@ -22,21 +23,25 @@ class RecipeController
      */
     public function store(Request $request)
     {
-        // Validação
         $validator = Validator::make($request->all(), Recipe::rules());
-
-        // Se houver erros
+    
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
-
-        // Cria a receita
-        $recipe = Recipe::create($request->all());
-
-        // Retorna a receita criada com o status 201 (created)
-        return response()->json($recipe, 201);
+    
+        if (Auth::check()) {
+            $recipe = new Recipe($request->all()); 
+        
+            $recipe->user_id = Auth::id(); 
+        
+            $recipe->save();
+        
+            return response()->json($recipe, 201);
+        } else {
+            return response()->json(['erro' => 'Usuário não está autenticado'], 401);
+        }
     }
-
+    
     /**
      * Display the specified resource.
      */
