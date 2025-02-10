@@ -3,4 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 
-Route::apiResource('users', UserController::class);
+Route::post('/users', [UserController::class, 'store']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('users', UserController::class)->except(['store']);
+});
