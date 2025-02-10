@@ -17,6 +17,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'v1/*',
         ]);
 
+        $middleware->append(CustomCors::class);
+
         $middleware->alias([
             'sanctum' => EnsureFrontendRequestsAreStateful::class,
             'cors' => CustomCors::class,
